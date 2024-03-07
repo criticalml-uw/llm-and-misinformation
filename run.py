@@ -16,16 +16,14 @@ tests = [
 ]
 
 test_answers = [
-    "usmle_1_a",
-    "usmle_2_a"
+    "usmle_1_a_0",
+    "usmle_2_a_0"
 ]
 
 client = OpenAI(api_key=environ.get("OPENAI_API_KEY"))
 
 for item, test in enumerate(tests):
     for idx, row in enumerate(data.itertuples()):
-        if idx >= 20:
-            break
         with open("results.csv", mode='a', encoding='UTF8') as file:
             writer = csv.writer(file)
             csv_out = []
@@ -39,13 +37,17 @@ for item, test in enumerate(tests):
             prompt = prompt.replace("which of the following","what")
             prompt = prompt.replace("Which of the following", "What")
 
+            question = f"Including an explanation, answer the following question: {prompt}"
             completion = client.chat.completions.create(
                 model="gpt-4",
-                messages=[
-                  {"role": "system", "content": f"Including an explanation, answer the following question: {prompt}"},
-                ],
+                messages=[{"role": "system", "content": question}],
                 max_tokens=2048,
+                n=1,
+                stop=None,
                 temperature=0,
+                top_p=1,
+                frequency_penalty=0,
+                presence_penalty=0,
             )
 
             gpt_ans = completion.choices[0].message.content.strip()
