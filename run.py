@@ -24,7 +24,7 @@ client = OpenAI(api_key=environ.get("OPENAI_API_KEY"))
 
 for item, test in enumerate(tests):
     for idx, row in enumerate(data.itertuples()):
-        with open("results.csv", mode='a', encoding='UTF8') as file:
+        with open("results.csv", mode="a", encoding="UTF8") as file:
             writer = csv.writer(file)
             csv_out = []
             csv_out.append(idx)
@@ -34,7 +34,7 @@ for item, test in enumerate(tests):
             # Remove multiple choice options, making question open-ended
             prompt = prompt.split("(A)")
             prompt = prompt[0]
-            prompt = prompt.replace("which of the following","what")
+            prompt = prompt.replace("which of the following", "what")
             prompt = prompt.replace("Which of the following", "What")
 
             question = f"Including an explanation, answer the following question: {prompt}"
